@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copiloto SFD - Avaliador de Sementes de Futuro (Versão Beta)</title>
+    <!-- Google Fonts: Outfit (headings) and Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for safe client-side Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Developer / Engineering Beta Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Permanent Disclaimer / Banner de Isenção -->
+        <header class="app-header">
+            <!-- Left side: Brand Identity -->
+            <div class="header-brand">
+                <div class="logo-container">
+                    <i class="fa-solid fa-compass-drafting logo-icon"></i>
+                    <h1>Copiloto <span class="accent-text">SFD</span></h1>
+                </div>
+                <p class="subtitle">Avaliador Metodológico de Sementes de Futuro para redatores do LSC/EGN</p>
+            </div>
+
+            <!-- Right side: Controls & Banner -->
+            <div class="header-actions">
+                <div class="disclaimer-banner">
+                    <div class="disclaimer-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="disclaimer-content">
+                        <strong style="color: var(--danger); text-transform: uppercase;">Aviso de
+                            Responsabilidade:</strong> O Copiloto SFD é uma ferramenta de apoio analítico. Todas as
+                        sugestões, críticas e justificativas apresentadas devem ser reavaliadas e validadas criticamente
+                        pelo próprio redator antes de qualquer incorporação ao texto final.
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Left Column: Draft Input Panel -->
+            <section class="panel glass-panel input-panel">
+                <div class="panel-header"
+                    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                    <div>
+                        <h2><i class="fa-solid fa-pen-to-square"></i> Rascunho da Semente</h2>
+                        <p class="panel-subtitle">Insira os campos da sua semente de futuro para avaliação.</p>
+                    </div>
+                    <button class="btn btn-secondary" id="btn-toggle-theme" title="Alternar Tema"
+                        style="padding: 0.4rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; height: fit-content; flex-shrink: 0;">
+                        <i class="fa-regular fa-moon" style="font-size: 0.95rem;"></i>
+                        <span id="theme-btn-text">Tema Escuro</span>
+                    </button>
+                </div>
+
+                <form id="semente-form" onsubmit="event.preventDefault();">
+                    <!-- Title Input -->
+                    <div class="form-group">
+                        <label for="titulo-input">Título da Semente</label>
+                        <input type="text" id="titulo-input"
+                            placeholder="Ex: JAPÃO REDEFINE ESTRATÉGIA DE ESTOQUES DE ARROZ COM VENDA DIRETA..."
+                            autocomplete="off">
+                        <div class="form-meta">
+                            <span class="help-text">Deve ser claro, factual e alinhado com a classificação. Evite
+                                títulos discursivos.</span>
+                            <span id="titulo-word-count" class="word-badge">0 palavras</span>
+                        </div>
+                    </div>
+
+                    <!-- Description Input -->
+                    <div class="form-group">
+                        <label for="descricao-input">Parágrafo Descritivo (PD)</label>
+                        <textarea id="descricao-input" rows="6"
+                            placeholder="Descreva o evento factual, a tendência ou a estratégia detalhadamente, fornecendo o contexto necessário."></textarea>
+                        <div class="form-meta">
+                            <span class="help-text">Relato factual, objetivo e datado do sinal. Recomendado de 80 a 250
+                                palavras.</span>
+                            <span id="descricao-word-count" class="word-badge">0 palavras</span>
+                        </div>
+                    </div>
+
+                    <!-- Description Impacts (ID) -->
+                    <div class="form-group">
+                        <label for="impactos-input">Impactos Futuros em Defesa (ID)</label>
+                        <textarea id="impactos-input" rows="6"
+                            placeholder="Descreva as consequências, fragilidades e vulnerabilidades logísticas, sociais, de segurança ou soberania decorrentes do fato."></textarea>
+                        <div class="form-meta">
+                            <span class="help-text font-warning">Importante: Descreva apenas impactos e vulnerabilidades
+                                factuais. NUNCA faça recomendações.</span>
+                            <span id="impactos-word-count" class="word-badge">0 palavras</span>
+                        </div>
+                    </div>
+
+                    <!-- Classification Input -->
+                    <!-- Classification Input -->
+                    <div class="form-group">
+                        <label for="classificacao-select">Classificação Sugerida</label>
+                        <select id="classificacao-select">
+                            <option value="" disabled selected>Selecione uma categoria...</option>
+                            <option value="FPF">Fato Portador de Futuro (FPF) - Novidade</option>
+                            <option value="EA">Estratégia dos Atores (EA) - Intenção/Agência</option>
+                            <option value="TP">Tendência de Peso (TP) - Inércia</option>
+                            <option value="SI">Surpresa Inevitável (SI) - Latência</option>
+                            <option value="FPD">Fato Pré-Determinado (FPD) - Eventualidade</option>
+                            <option value="IC">Incerteza Crítica (IC) - Encruzilhada</option>
+                            <option value="Coringa">Coringa (Wild Card) - Ruptura</option>
+                        </select>
+                    </div>
+
+                    <!-- Action and Configuration Row -->
+                    <div class="action-row"
+                        style="display: flex; gap: 0.5rem; justify-content: space-between; width: 100%; flex-wrap: wrap;">
+                        <button type="button" id="btn-api-toggle" class="btn btn-secondary"
+                            style="flex: 1; justify-content: center; min-width: 140px;">
+                            <i class="fa-solid fa-key"></i> Configurar Chave API
+                        </button>
+                        <button type="button" id="btn-clear-fields" class="btn btn-secondary"
+                            style="flex: 1; justify-content: center; min-width: 140px;" title="Limpar todos os campos">
+                            <i class="fa-solid fa-trash-can"></i> Limpar Campos
+                        </button>
+                        <button type="button" id="btn-avaliar-ia" class="btn btn-primary btn-glow"
+                            style="flex: 1; justify-content: center; min-width: 140px;" disabled>
+                            <i class="fa-solid fa-circle-nodes"></i> Avaliar com IA
+                        </button>
+                    </div>
+
+                    <!-- Collapsible API Configuration Panel -->
+                    <div id="api-panel" class="collapsible-panel hidden">
+                        <div class="api-panel-content">
+                            <label for="api-key-input">Gemini API Key (salva localmente no navegador)</label>
+                            <div class="input-with-button">
+                                <input type="password" id="api-key-input"
+                                    placeholder="Insira sua Gemini API Key (AIzaSy...)">
+                                <button type="button" id="btn-save-key" class="btn btn-accent">Salvar</button>
+                            </div>
+                            <label for="model-select" style="margin-top: 0.5rem; display: block;">Modelo Gemini</label>
+                            <select id="model-select" style="margin-top: 0.25rem;">
+                                <option value="gemini-3.5-flash" selected>Gemini 3.5 Flash (Recomendado)</option>
+                                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                            </select>
+
+                            <!-- Lite Mode Toggle -->
+                            <div class="toggle-container"
+                                style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                                <span class="toggle-label"
+                                    style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Limitar
+                                    Contexto (Modo Lite)</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="lite-mode-toggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <p class="api-help"
+                                style="margin-top: 0.4rem; line-height: 1.35; color: var(--danger); font-weight: 600;">
+                                Desabilite o modo lite apenas se você tem um plano pago do Gemini. Se sua conta for
+                                gratuita, desabilitar causará erro de limite de cota (Quota Exceeded).</p>
+
+                            <p class="api-help"
+                                style="margin-top: 0.75rem; border-top: 1px solid var(--panel-border); padding-top: 0.5rem;">
+                                Configure sua chave Gemini de forma 100% segura localmente no navegador.</p>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Column: Diagnostics and Evaluation Panel (AI Only) -->
+            <section class="panel glass-panel diagnostics-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-square-poll-vertical"></i> Diagnóstico da Semente</h2>
+                    <p class="panel-subtitle">Resultado da avaliação detalhada pela IA.</p>
+                </div>
+
+                <div class="diagnostics-content">
+                    <!-- State 1: No API Key -->
+                    <div id="ia-state-no-key" class="ia-state-card active">
+                        <i class="fa-solid fa-lock ia-state-icon" style="margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem;">Chave de API Necessária</h3>
+                        <p style="margin-bottom: 1.5rem; max-width: 400px;">Para realizar a avaliação avançada,
+                            configure a chave Gemini clicando em <strong>Configurar Chave API</strong> à esquerda.</p>
+
+                        <!-- Step-by-step instructions directly visible in the right panel -->
+                        <div class="api-tutorial"
+                            style="width: 100%; text-align: left; padding: 1.2rem; border-radius: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.85rem;">
+                            <h4
+                                style="margin: 0 0 0.5rem 0; color: var(--warning); font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-circle-info"></i> Como obter sua chave gratuitamente:
+                            </h4>
+                            <ol style="margin: 0; padding-left: 1.15rem; color: var(--text-secondary);">
+                                <li style="margin-bottom: 0.4rem; line-height: 1.4;">Acesse o portal do <strong><a
+                                            href="https://aistudio.google.com/" target="_blank" rel="noopener"
+                                            style="color: var(--accent); text-decoration: none;">Google AI Studio <i
+                                                class="fa-solid fa-arrow-up-right-from-square"
+                                                style="font-size: 0.75rem;"></i></a></strong> e logue com sua conta
+                                    Google.</li>
+                                <li style="margin-bottom: 0.4rem; line-height: 1.4;">No canto superior ou menu lateral,
+                                    clique em <strong>"Get API key"</strong> (Obter chave de API).</li>
+                                <li style="margin-bottom: 0.4rem; line-height: 1.4;">Clique em <strong>"Create API
+                                        key"</strong> e selecione a opção <strong>"Create API key in new
+                                        project"</strong>.</li>
+                                <li style="margin-bottom: 0.4rem; line-height: 1.4;">Copie a chave gerada (que inicia
+                                    com <code>AIzaSy...</code>), abra as configurações à esquerda, cole no campo e
+                                    clique em <strong>Salvar</strong>.</li>
+                            </ol>
+                            <div class="tutorial-warning"
+                                style="margin: 0.6rem 0 0 0; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-shield-halved" style="color: var(--success);"></i>
+                                <span><strong>Privacidade & Segurança:</strong> Sua chave é armazenada apenas localmente
+                                    no seu próprio navegador e nunca é enviada a terceiros.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- State 2: Prompt for Evaluation -->
+                    <div id="ia-state-prompt" class="ia-state-card">
+                        <i class="fa-solid fa-wand-magic-sparkles ia-state-icon text-accent"
+                            style="margin-bottom: 0.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem;">Pronto para Avaliação</h3>
+                        <p style="margin-bottom: 1.5rem; max-width: 400px;">Preencha os campos da Semente de Futuro à
+                            esquerda e clique em <strong>Avaliar com IA</strong> para iniciar a revisão detalhada
+                            baseada no clone de sua conversa.</p>
+
+                        <!-- Confirmation state showing API is connected -->
+                        <div class="api-tutorial"
+                            style="width: 100%; text-align: left; padding: 1.2rem; border-radius: 12px; background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.15); font-size: 0.85rem;">
+                            <h4
+                                style="margin: 0 0 0.50rem 0; color: var(--success); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-circle-check"></i> Chave Gemini Conectada
+                            </h4>
+                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45;">
+                                A plataforma está conectada com sucesso ao modelo selecionado e o histórico completo da
+                                conversa original está carregado na memória. Pronto para iniciar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- State 3: Loading -->
+                    <div id="ia-state-loading" class="ia-state-card">
+                        <div class="spinner"></div>
+                        <h3>Analisando Rascunho...</h3>
+                    </div>
+
+                    <!-- State 4: Results Rendered -->
+                    <div id="ia-state-results" class="ia-state-card">
+                        <div class="ia-results-header" style="justify-content: center; width: 100%;">
+                            <span class="results-disclaimer"
+                                style="color: var(--danger); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; width: 100%; justify-content: center; text-align: center;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Lembre-se: Reavalie criticamente antes
+                                de usar!
+                            </span>
+                        </div>
+                        <!-- AI Output Rendered here via marked.js -->
+                        <div id="ia-output-container" class="markdown-body"></div>
+                    </div>
+
+                    <!-- State 5: Error -->
+                    <div id="ia-state-error" class="ia-state-card">
+                        <i class="fa-solid fa-circle-xmark text-danger ia-state-icon"></i>
+                        <h3>Erro na Chamada do Gemini</h3>
+                        <p id="api-error-message">Ocorreu um erro ao conectar com o serviço do Gemini. Verifique sua
+                            chave de API e sua conexão de rede.</p>
+                        <button type="button" id="btn-retry-eval" class="btn btn-primary">Tentar Novamente</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>

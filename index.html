@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VJ Futuros | Plataforma em Construção</title>
+    <meta name="description"
+        content="VJ Futuros - Hub de conhecimento em estudos prospectivos (Foresight), modelagem de cenários e planejamento estratégico de defesa, coordenado pelo Prof. Dr. Vinicius Janick.">
+    <meta name="keywords"
+        content="VJ Futuros, Vinicius Janick, Foresight, Planejamento Estratégico, Defesa, SCIC Web, COSFD, smplDEA, DEA, USP, EGN, Cenários">
+    <meta name="author" content="VJ Futuros">
+    <link rel="icon" type="image/png" href="assets/logo2nobg.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+
+    <!-- JSON-LD Structured Metadata (SEO & AI Optimization / GEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://seu-site.com.br/#person",
+          "name": "Vinicius Janick",
+          "alternateName": "Vinicius Janick",
+          "givenName": "Vinicius",
+          "familyName": "Janick",
+          "honorificPrefix": "Prof. Dr.",
+          "jobTitle": "Professor e Pesquisador de Estudos Prospectivos e Defesa",
+          "description": "Doutor em Administração pela USP com foco em estudos prospectivos (foresight), planejamento estratégico e defesa. Coordenador da plataforma VJ Futuros.",
+          "url": "https://seu-site.com.br",
+          "sameAs": [
+            "http://lattes.cnpq.br/0176230465707523",
+            "https://orcid.org/0000-0002-3636-7993",
+            "https://www.linkedin.com/in/vjanick/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://seu-site.com.br/#website",
+          "url": "https://seu-site.com.br",
+          "name": "VJ Futuros",
+          "description": "Hub de conhecimento em estudos prospectivos e modelagem de cenários sob a coordenação do Prof. Dr. Vinicius Janick."
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://seu-site.com.br/#scicweb",
+          "name": "SCIC Web",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "All",
+          "description": "Simulador de Cenários com Impactos Cruzados (SCIC). Ferramenta interativa de cálculo de probabilidade e matriz de impactos cruzados.",
+          "url": "https://seu-site.com.br/utilitarios/SCICWEB/scicweb.html"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://seu-site.com.br/#cosfd",
+          "name": "COSFD",
+          "applicationCategory": "StrategicApplication",
+          "operatingSystem": "All",
+          "description": "Sistema analítico para dimensionamento, avaliação de estruturas de força e modelos de apoio à decisão em segurança e defesa.",
+          "url": "https://seu-site.com.br/utilitarios/COSFD/cosfd.html"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://seu-site.com.br/#smpldea",
+          "name": "smplDEA",
+          "applicationCategory": "AnalyticsApplication",
+          "operatingSystem": "All",
+          "description": "Plataforma para Análise Envoltória de Dados (Data Envelopment Analysis - DEA) aplicada a modelos de eficiência e otimização."
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: rgba(255, 255, 255, 1);
+            --accent-gold: #b8860b;
+            --accent-gold-light: #d4af37;
+            --accent-gold-glow: rgba(212, 175, 55, 0.25);
+            --accent-blue: #2563eb;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-glass: rgba(0, 0, 0, 0.08);
+            --border-gold-glass: rgba(184, 134, 11, 0.3);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 1px rgba(0, 0, 0, 0.1);
+            --shadow-card-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.12), 0 0 25px rgba(212, 175, 55, 0.2);
+            --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Background Particles (Light Theme Tailored) */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 {
+            top: -120px;
+            left: -100px;
+            width: 550px;
+            height: 550px;
+            background: rgba(212, 175, 55, 0.15);
+        }
+
+        .glow-2 {
+            bottom: -150px;
+            right: -100px;
+            width: 650px;
+            height: 650px;
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .glow-3 {
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Header */
+        header {
+            padding: 32px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            height: 44px;
+            width: auto;
+            filter: drop-shadow(0 2px 6px rgba(184, 134, 11, 0.3));
+            transition: var(--transition);
+        }
+
+        .brand-block:hover .brand-logo {
+            transform: scale(1.08) rotate(3deg);
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+
+        .status-badge-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(184, 134, 11, 0.08);
+            border: 1px solid var(--border-gold-glass);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .dot-pulse {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(184, 134, 11, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 44px 0;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .construction-tag {
+            display: inline-block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 14px;
+        }
+
+        .hero-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 18px;
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        /* Utilities Cards Grid (3 Columns) */
+        .utilities-section {
+            padding: 20px 0 60px 0;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .utility-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+
+        .utility-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold-light), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .utility-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-gold-glass);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .utility-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(184, 134, 11, 0.08);
+            border: 1px solid var(--border-gold-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-glass);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        /* Action Buttons */
+        .card-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.12) 0%, rgba(184, 134, 11, 0.04) 100%);
+            border: 1px solid var(--border-gold-glass);
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .utility-card:hover .card-btn:not(.btn-disabled) {
+            background: var(--accent-gold);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.35);
+        }
+
+        .card-btn svg {
+            transition: transform var(--transition);
+        }
+
+        .card-btn:hover:not(.btn-disabled) svg {
+            transform: translateX(4px);
+        }
+
+        /* Disabled / Em breve Button */
+        .btn-disabled {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: var(--border-glass);
+            color: var(--text-muted);
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        .utility-card.card-coming-soon {
+            opacity: 0.9;
+        }
+
+        /* Institutional Footer */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 36px 0;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .prof-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prof-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .prof-role {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .academic-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .pill-link:hover {
+            color: var(--accent-gold);
+            border-color: var(--border-gold-glass);
+            background: rgba(184, 134, 11, 0.08);
+        }
+
+        .portal-preview-link {
+            display: inline-block;
+            margin-top: 24px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .portal-preview-link:hover {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 2.1rem;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ambient Glow Effects -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <div class="container">
+        <!-- Top Header -->
+        <header>
+            <a href="#" class="brand-block">
+                <img src="assets/logo2nobg.png" alt="VJ Monograma" class="brand-logo">
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">VJ Futuros</span>
+                    <span class="brand-subtitle">Hub de conhecimento em estudos prospectivos</span>
+                </div>
+            </a>
+            <div class="status-badge-header">
+                <span class="dot-pulse"></span>
+                <span>Plataforma em Construção</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero">
+                <span class="construction-tag">Em Desenvolvimento</span>
+                <h1 class="hero-title">Modelagem de Cenários &amp; Estudos Prospectivos</h1>
+                <p class="hero-subtitle">
+                    Estamos reestruturando o portal para oferecer uma nova experiência integrada em pesquisa prospectiva, 
+                    métodos quantitativos de defesa e análise estratégica sob incerteza.
+                </p>
+            </section>
+
+            <!-- Active Utilities Section -->
+            <section class="utilities-section">
+                <p class="section-label">Plataformas e Ferramentas Analíticas</p>
+                <div class="cards-grid">
+
+                    <!-- SCIC Web Card -->
+                    <div class="utility-card">
+                        <div>
+                            <div class="card-header">
+                                <div class="card-icon-wrapper">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <circle cx="12" cy="12" r="6" />
+                                        <circle cx="12" cy="12" r="2" />
+                                    </svg>
+                                </div>
+                                <span class="card-tag">Impactos Cruzados</span>
+                            </div>
+                            <h2 class="card-title">SCIC Web</h2>
+                            <p class="card-desc">
+                                Simulador de Cenários com Impactos Cruzados (SCIC). Ferramenta interativa de cálculo 
+                                de probabilidades futuras e interdependência de variáveis em cenários geopolíticos e de defesa.
+                            </p>
+                        </div>
+                        <a href="utilitarios/SCICWEB/scicweb.html" target="_blank" class="card-btn">
+                            <span>Acessar SCIC Web</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- COSFD Card -->
+                    <div class="utility-card">
+                        <div>
+                            <div class="card-header">
+                                <div class="card-icon-wrapper">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                </div>
+                                <span class="card-tag">Avaliação de SFD</span>
+                            </div>
+                            <h2 class="card-title">COSFD</h2>
+                            <p class="card-desc">
+                                Sistema analítico para dimensionamento, avaliação de estruturas de força e modelos 
+                                de apoio à tomada de decisão estratégica em segurança e defesa.
+                            </p>
+                        </div>
+                        <a href="utilitarios/COSFD/cosfd.html" target="_blank" class="card-btn">
+                            <span>Acessar COSFD</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- smplDEA Card (Em Breve) -->
+                    <div class="utility-card card-coming-soon">
+                        <div>
+                            <div class="card-header">
+                                <div class="card-icon-wrapper">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="20" x2="18" y2="10" />
+                                        <line x1="12" y1="20" x2="12" y2="4" />
+                                        <line x1="6" y1="20" x2="6" y2="14" />
+                                    </svg>
+                                </div>
+                                <span class="card-tag">Análise Envoltória (DEA)</span>
+                            </div>
+                            <h2 class="card-title">smplDEA</h2>
+                            <p class="card-desc">
+                                Plataforma para Análise Envoltória de Dados (Data Envelopment Analysis - DEA), 
+                                voltada para medição de eficiência, benchmarking e otimização de recursos.
+                            </p>
+                        </div>
+                        <span class="card-btn btn-disabled">
+                            <span>Em breve</span>
+                        </span>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <!-- Institutional Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="prof-info">
+                    <span class="prof-name">Prof. Dr. Vinicius Janick</span>
+                    <span class="prof-role">Universidade de São Paulo (USP) &amp; Escola de Guerra Naval (EGN)</span>
+                </div>
+                <div class="academic-pills">
+                    <a href="http://lattes.cnpq.br/0176230465707523" target="_blank" class="pill-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                        </svg>
+                        <span>Lattes</span>
+                    </a>
+                    <a href="https://orcid.org/0000-0002-3636-7993" target="_blank" class="pill-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 12h8M12 8v8" />
+                        </svg>
+                        <span>ORCID</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/vjanick/" target="_blank" class="pill-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                            <rect x="2" y="9" width="4" height="12" />
+                            <circle cx="4" cy="4" r="2" />
+                        </svg>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

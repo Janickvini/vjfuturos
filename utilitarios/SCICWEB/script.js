@@ -319,6 +319,75 @@ function setupEventListeners() {
         });
     }
 
+    const linkGoToForgot = document.getElementById("link-go-to-forgot");
+    if (linkGoToForgot) {
+        linkGoToForgot.addEventListener("click", (e) => {
+            e.preventDefault();
+            showAuthForm("forgot");
+        });
+    }
+
+    const linkForgotToLogin = document.getElementById("link-forgot-to-login");
+    if (linkForgotToLogin) {
+        linkForgotToLogin.addEventListener("click", (e) => {
+            e.preventDefault();
+            showAuthForm("login");
+        });
+    }
+
+    // Submit de Esqueci a Senha
+    const formForgot = document.getElementById("form-forgot");
+    if (formForgot) {
+        formForgot.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("forgot-email").value;
+            const btnSubmit = formForgot.querySelector("button[type='submit']");
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Enviando link...";
+
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href
+            });
+
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Enviar Link de Recuperação";
+
+            if (error) {
+                alert(`Erro ao solicitar recuperação: ${error.message}`);
+            } else {
+                alert("E-mail de recuperação enviado com sucesso! Verifique a sua caixa de entrada.");
+                showAuthForm("login");
+            }
+        });
+    }
+
+    // Submit de Atualização de Senha (via link do e-mail)
+    const formUpdatePassword = document.getElementById("form-update-password");
+    if (formUpdatePassword) {
+        formUpdatePassword.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById("update-password-input").value;
+            const btnSubmit = formUpdatePassword.querySelector("button[type='submit']");
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Salvando nova senha...";
+
+            const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Salvar Nova Senha";
+
+            if (error) {
+                alert(`Erro ao redefinir senha: ${error.message}`);
+            } else {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState("", document.title, window.location.pathname + window.location.search);
+                }
+                alert("Senha alterada com sucesso! Você já pode fazer login com a sua nova senha.");
+                showAuthForm("login");
+            }
+        });
+    }
+
     // Submit de Login
     const formLogin = document.getElementById("form-login");
     if (formLogin) {
@@ -1848,9 +1917,15 @@ function toggleResultsView(isOrthoMode) {
 
 // Verifica se há uma sessão ativa ao carregar a página
 async function checkSession() {
+    if (!supabaseClient) return;
+
+    const isRecovery = window.location.hash.includes("type=recovery");
+
     // Escuta mudanças no estado de login em tempo real
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        if (session) {
+        if (event === "PASSWORD_RECOVERY" || isRecovery) {
+            showAuthForm("update-password");
+        } else if (session) {
             currentUser = session.user;
             await fetchProfileAndSetupUI(session.user);
         } else {
@@ -1861,7 +1936,9 @@ async function checkSession() {
     });
 
     const { data: { session }, error } = await supabaseClient.auth.getSession();
-    if (session) {
+    if (isRecovery) {
+        showAuthForm("update-password");
+    } else if (session) {
         currentUser = session.user;
         await fetchProfileAndSetupUI(session.user);
     } else {
@@ -1871,6 +1948,14 @@ async function checkSession() {
 
 // Busca o perfil do usuário na tabela do banco de dados e ajusta a interface
 async function fetchProfileAndSetupUI(user) {
+    if (!supabaseClient) return;
+    
+    // Se o usuário está redefinindo a senha via link de e-mail, forçar tela de redefinição
+    if (window.location.hash.includes("type=recovery")) {
+        showAuthForm("update-password");
+        return;
+    }
+
     const { data, error } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -1907,28 +1992,24 @@ async function fetchProfileAndSetupUI(user) {
     }
 }
 
-// Mostra o formulário de login/cadastro ou pendência correto na overlay
+// Mostra o formulário de login/cadastro/recuperação ou pendência correto na overlay
 function showAuthForm(view, email = "", isExpired = false) {
     const overlay = document.getElementById("auth-overlay");
     const formLogin = document.getElementById("form-login");
     const formRegister = document.getElementById("form-register");
+    const formForgot = document.getElementById("form-forgot");
+    const formUpdatePassword = document.getElementById("form-update-password");
     const authPending = document.getElementById("auth-pending");
     
     if (overlay) overlay.style.display = "flex";
     
-    if (view === "login") {
-        if (formLogin) formLogin.style.display = "flex";
-        if (formRegister) formRegister.style.display = "none";
-        if (authPending) authPending.style.display = "none";
-    } else if (view === "register") {
-        if (formLogin) formLogin.style.display = "none";
-        if (formRegister) formRegister.style.display = "flex";
-        if (authPending) authPending.style.display = "none";
-    } else if (view === "pending") {
-        if (formLogin) formLogin.style.display = "none";
-        if (formRegister) formRegister.style.display = "none";
-        if (authPending) authPending.style.display = "flex";
-        
+    if (formLogin) formLogin.style.display = (view === "login") ? "flex" : "none";
+    if (formRegister) formRegister.style.display = (view === "register") ? "flex" : "none";
+    if (formForgot) formForgot.style.display = (view === "forgot") ? "flex" : "none";
+    if (formUpdatePassword) formUpdatePassword.style.display = (view === "update-password") ? "flex" : "none";
+    if (authPending) authPending.style.display = (view === "pending") ? "flex" : "none";
+    
+    if (view === "pending") {
         const emailEl = document.getElementById("pending-user-email");
         if (emailEl) emailEl.textContent = email;
 

@@ -86,6 +86,7 @@ function setupEventListeners() {
                 alert("Erro ao redefinir senha: " + error.message);
             } else {
                 alert("Senha redefinida com sucesso! Você já pode entrar com sua nova senha.");
+                window.location.hash = "";
                 showAuthForm("login");
             }
         });
@@ -1049,8 +1050,10 @@ function downloadExcelTemplate() {
 async function checkSession() {
     if (!supabaseClient) return;
 
+    const isRecovery = window.location.hash.includes("type=recovery");
+
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === "PASSWORD_RECOVERY") {
+        if (event === "PASSWORD_RECOVERY" || isRecovery) {
             showAuthForm("update-password");
         } else if (session) {
             currentUser = session.user;
@@ -1063,7 +1066,9 @@ async function checkSession() {
     });
 
     const { data: { session }, error } = await supabaseClient.auth.getSession();
-    if (session) {
+    if (isRecovery) {
+        showAuthForm("update-password");
+    } else if (session) {
         currentUser = session.user;
         await fetchProfileAndSetupUI(session.user);
     } else {
@@ -1073,6 +1078,10 @@ async function checkSession() {
 
 async function fetchProfileAndSetupUI(user) {
     if (!supabaseClient) return;
+    if (window.location.hash.includes("type=recovery")) {
+        showAuthForm("update-password");
+        return;
+    }
     const { data, error } = await supabaseClient
         .from('profiles')
         .select('*')

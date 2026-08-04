@@ -1,3 +1,276 @@
+// Configuração do Cliente Supabase
+const supabaseUrl = 'https://nbogqyaicjpwkdyyejko.supabase.co';
+const supabaseKey = 'sb_publishable_Q3g-QjKJW8WcgC9bgly2Bg_-hEI1deg';
+let supabaseClient = null;
+if (typeof supabase !== 'undefined') {
+    supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+}
+
+let currentUser = null;
+let currentUserProfile = null;
+
+// Auth Forms DOM Elements
+const authOverlay = document.getElementById('auth-overlay');
+const formLogin = document.getElementById('form-login');
+const formRegister = document.getElementById('form-register');
+const formForgot = document.getElementById('form-forgot');
+const formUpdatePassword = document.getElementById('form-update-password');
+const authPending = document.getElementById('auth-pending');
+const pendingEmail = document.getElementById('pending-user-email');
+const btnLogout = document.getElementById('btn-logout');
+const btnAuthLogout = document.getElementById('btn-auth-logout');
+
+const linkGoToRegister = document.getElementById('link-go-to-register');
+const linkGoToLogin = document.getElementById('link-go-to-login');
+const linkGoToForgot = document.getElementById('link-go-to-forgot');
+const linkForgotToLogin = document.getElementById('link-forgot-to-login');
+
+async function checkSession() {
+    if (!supabaseClient) return;
+
+    const isRecovery = window.location.hash.includes("type=recovery");
+
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === "PASSWORD_RECOVERY" || isRecovery) {
+            showAuthForm("update-password");
+        } else if (session) {
+            currentUser = session.user;
+            await fetchProfileAndSetupUI(session.user);
+        } else {
+            currentUser = null;
+            currentUserProfile = null;
+            showAuthForm("login");
+        }
+    });
+
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (isRecovery) {
+        showAuthForm("update-password");
+    } else if (session) {
+        currentUser = session.user;
+        await fetchProfileAndSetupUI(session.user);
+    } else {
+        showAuthForm("login");
+    }
+}
+
+async function fetchProfileAndSetupUI(user) {
+    if (!supabaseClient) return;
+    if (window.location.hash.includes("type=recovery")) {
+        showAuthForm("update-password");
+        return;
+    }
+    const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+    
+    if (error || !data) {
+        await supabaseClient.auth.signOut();
+        showAuthForm("login");
+        return;
+    }
+    
+    currentUserProfile = data;
+    const now = new Date();
+    const isExpired = data.expires_at_sfd ? new Date(data.expires_at_sfd) < now : false;
+    
+    // Verificação de permissão específica para o Copiloto SFD
+    const isApprovedSFD = (data.is_aproved_sfd === true);
+    
+    if (!isApprovedSFD || isExpired) {
+        const customMsg = isExpired ? "Sua licença de acesso ao Copiloto SFD expirou." : "Seu cadastro foi realizado, mas precisa ser aprovado pelo administrador para acessar o <b>Copiloto SFD</b>.";
+        showAuthForm("pending", user.email, customMsg, isExpired);
+    } else {
+        hideAuthOverlay();
+    }
+}
+
+function showAuthForm(view, email = "", customMsg = "", isExpired = false) {
+    if (authOverlay) authOverlay.style.display = "flex";
+    
+    if (formLogin) formLogin.style.display = (view === "login") ? "flex" : "none";
+    if (formRegister) formRegister.style.display = (view === "register") ? "flex" : "none";
+    if (formForgot) formForgot.style.display = (view === "forgot") ? "flex" : "none";
+    if (formUpdatePassword) formUpdatePassword.style.display = (view === "update-password") ? "flex" : "none";
+    if (authPending) authPending.style.display = (view === "pending") ? "flex" : "none";
+    
+    if (view === "pending") {
+        if (pendingEmail) pendingEmail.textContent = email;
+        const pendingMsgEl = authPending.querySelector("p");
+        if (pendingMsgEl && customMsg) pendingMsgEl.innerHTML = customMsg;
+        
+        const icon = authPending.querySelector("i");
+        const h3 = authPending.querySelector("h3");
+        
+        if (isExpired) {
+            if (icon) {
+                icon.className = "fa-solid fa-hourglass-end";
+                icon.style.color = "var(--danger)";
+            }
+            if (h3) h3.textContent = "Acesso Expirado";
+        } else {
+            if (icon) {
+                icon.className = "fa-solid fa-clock-rotate-left";
+                icon.style.color = "var(--accent)";
+            }
+            if (h3) h3.textContent = "Acesso Pendente";
+        }
+    }
+}
+
+function hideAuthOverlay() {
+    if (authOverlay) authOverlay.style.display = "none";
+}
+
+// Bind Auth UI Event Listeners
+if (linkGoToRegister) {
+    linkGoToRegister.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthForm("register");
+    });
+}
+
+if (linkGoToLogin) {
+    linkGoToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthForm("login");
+    });
+}
+
+if (linkGoToForgot) {
+    linkGoToForgot.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthForm("forgot");
+    });
+}
+
+if (linkForgotToLogin) {
+    linkForgotToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthForm("login");
+    });
+}
+
+if (formLogin) {
+    formLogin.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        
+        const btnSubmit = formLogin.querySelector("button[type='submit']");
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Entrando...";
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Entrar";
+
+        if (error) {
+            alert("Erro de login: " + error.message);
+        } else {
+            currentUser = data.user;
+            await fetchProfileAndSetupUI(data.user);
+        }
+    });
+}
+
+if (formRegister) {
+    formRegister.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+        
+        const btnSubmit = formRegister.querySelector("button[type='submit']");
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Enviando solicitação...";
+
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Solicitar Cadastro";
+
+        if (error) {
+            alert("Erro ao cadastrar: " + error.message);
+        } else {
+            alert("Solicitação de cadastro realizada! O administrador precisa aprovar o seu acesso ao Copiloto SFD antes de você poder entrar.");
+            showAuthForm("login");
+        }
+    });
+}
+
+if (formForgot) {
+    formForgot.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("forgot-email").value;
+        const btnSubmit = formForgot.querySelector("button[type='submit']");
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Enviando link...";
+
+        const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.href
+        });
+
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Enviar Link de Recuperação";
+
+        if (error) {
+            alert("Erro ao solicitar redefinição: " + error.message);
+        } else {
+            alert("As instruções de redefinição de senha foram enviadas para o seu e-mail com sucesso! Verifique sua caixa de entrada e spam.");
+            showAuthForm("login");
+        }
+    });
+}
+
+if (formUpdatePassword) {
+    formUpdatePassword.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const newPassword = document.getElementById("update-password-input").value;
+        const btnSubmit = formUpdatePassword.querySelector("button[type='submit']");
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Atualizando senha...";
+
+        const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Salvar Nova Senha";
+
+        if (error) {
+            alert("Erro ao redefinir senha: " + error.message);
+        } else {
+            alert("Senha redefinida com sucesso! Você já pode entrar com sua nova senha.");
+            window.location.hash = "";
+            showAuthForm("login");
+        }
+    });
+}
+
+if (btnAuthLogout) {
+    btnAuthLogout.addEventListener("click", async () => {
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        currentUserProfile = null;
+        showAuthForm("login");
+    });
+}
+
+if (btnLogout) {
+    btnLogout.addEventListener("click", async () => {
+        if (confirm("Deseja sair da sua conta?")) {
+            await supabaseClient.auth.signOut();
+            currentUser = null;
+            currentUserProfile = null;
+            showAuthForm("login");
+        }
+    });
+}
+
+// Start Auth Session Check
+checkSession();
+
 // DOM Elements
 const tituloInput = document.getElementById('titulo-input');
 const descricaoInput = document.getElementById('descricao-input');

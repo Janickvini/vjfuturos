@@ -659,3 +659,44 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(18px);
 }
+
+/* Auth Overlay Styles */
+#auth-overlay {
+    font-family: var(--font-sans);
+}
+
+#auth-overlay .glass-card {
+    transition: var(--transition-smooth);
+    animation: authFadeIn 0.3s ease-out;
+}
+
+@keyframes authFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#auth-overlay .form-input:focus {
+    outline: none;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+#auth-overlay button[type="submit"] {
+    transition: var(--transition-smooth);
+}
+
+#auth-overlay button[type="submit"]:hover {
+    background-color: #4b54cc !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(92, 103, 222, 0.25);
+}
+
+#auth-overlay button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}

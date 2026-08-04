@@ -357,7 +357,7 @@ Para ser aprovada, a matéria deve:
 
 // Settings persistence
 let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
-let geminiModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
+let geminiModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
 let geminiLiteMode = localStorage.getItem('gemini_lite_mode') !== 'false'; // Default is true (Lite)
 
 if (geminiApiKey) {

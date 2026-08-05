@@ -1044,3 +1044,43 @@ body.light-theme .badge-theme.active {
   border-color: rgba(0, 150, 255, 0.2);
 }
 
+/* Legibility fixes for white-on-light issues in Light Theme */
+body.light-theme .title-area h1 {
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .kpi-value {
+  color: var(--text-main);
+}
+
+body.light-theme .chart-title {
+  color: var(--text-main);
+}
+
+body.light-theme .table-panel-title {
+  color: var(--text-main);
+}
+
+body.light-theme .btn-reset-filters:hover {
+  color: var(--color-secondary);
+}
+
+body.light-theme .multiselect-tag i:hover {
+  color: var(--color-secondary);
+}
+
+body.light-theme .tab-btn:hover:not(.active) {
+  color: var(--color-primary);
+}
+
+body.light-theme .table-link:hover {
+  color: var(--color-secondary);
+  text-decoration: underline;
+}
+
+body.light-theme .btn-page:hover:not(:disabled) {
+  color: #fff;
+}
+

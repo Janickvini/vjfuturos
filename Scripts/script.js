@@ -109,7 +109,39 @@ document.addEventListener('DOMContentLoaded', () => {
             activateMainTab(targetTab);
         });
     });
+ 
+    // --- 1.5. Viaje no Tempo (Time Travel Theme Switcher) ---
+    const timeSelect = document.getElementById('time-select');
+    const themeStylesheet = document.getElementById('theme-stylesheet');
+    let lastValidTime = '2020'; // Keep track of previous valid selection
 
+    if (timeSelect && themeStylesheet) {
+        timeSelect.addEventListener('change', (e) => {
+            const selectedVal = e.target.value;
+
+            if (selectedVal === '2050') {
+                // Show warning popup
+                alert('ERRO CONCEITUAL: para adivinhações consulte um futurista.');
+                // Reset select value back to previous valid state
+                timeSelect.value = lastValidTime;
+            } else {
+                // Update last valid time
+                lastValidTime = selectedVal;
+                
+                // Map select value to corresponding stylesheet
+                if (selectedVal === '1990') {
+                    themeStylesheet.setAttribute('href', 'Estilos/style_90.css?v=' + Date.now());
+                } else if (selectedVal === '2000') {
+                    themeStylesheet.setAttribute('href', 'Estilos/style_2000.css?v=' + Date.now());
+                } else if (selectedVal === '2010') {
+                    themeStylesheet.setAttribute('href', 'Estilos/style_2010.css?v=' + Date.now());
+                } else {
+                    // Default / 2020s
+                    themeStylesheet.setAttribute('href', 'Estilos/style.css?v=' + Date.now());
+                }
+            }
+        });
+    }
 
     // --- 2. Mobile Menu Toggle ---
     if (mobileMenuToggle && sidebar) {

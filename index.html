@@ -31,7 +31,7 @@
         rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="Estilos/style.css?v=4.4">
+    <link rel="stylesheet" href="Estilos/style.css?v=4.4" id="theme-stylesheet">
 
     <!-- JSON-LD Structured Metadata (SEO & AI Optimization / GEO) -->
     <script type="application/ld+json">
@@ -189,6 +189,16 @@
 
             <!-- Sidebar Footer Controls & Quick Links -->
             <div class="sidebar-footer">
+                <div class="time-travel-container" style="margin-bottom: 16px; padding: 0 4px;">
+                    <label for="time-select" style="display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Viaje no Tempo</label>
+                    <select id="time-select" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-glass); background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-primary); font-size: 0.82rem; cursor: pointer; outline: none; transition: all var(--transition-fast);">
+                        <option value="1990">Década de 90 (Web 1.0)</option>
+                        <option value="2000">Década de 2000 (Clássico)</option>
+                        <option value="2010">Década de 2010 (Frutiger Aero)</option>
+                        <option value="2020" selected>Década de 2020 (Padrão)</option>
+                        <option value="2050">Década de 2050 (Futuro)</option>
+                    </select>
+                </div>
                 <div class="footer-buttons">
                     <button id="theme-toggle" class="theme-toggle" aria-label="Alternar Tema" title="Alternar Tema">
                         <!-- Mostra Sol para mudar para Claro -->

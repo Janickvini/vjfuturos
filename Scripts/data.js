@@ -11,6 +11,15 @@
 const publicationsData = [
     {
         ano: "2026",
+        tipo: "artigo",
+        titulo: "Externalities and Misaligned Incentives in Sustainable Solid Waste Management: An Economic Theory Perspective for Policy Design in Brazil",
+        autores: "Espinoza, D. F., Rebehy, P. C. P. W., Salgado Junior, A. P., Barossi Filho, M., Janick, V. R. F., & Novi, J. C.",
+        fonte: "Sustainability, 18(16), 8296.",
+        link: "https://doi.org/10.3390/su18168296",
+        status: "DOI"
+    },
+    {
+        ano: "2026",
         tipo: "livro",
         titulo: "Manual para Classificação e Redação de Sementes de Futuro",
         autores: "Janick, V. R. F.",

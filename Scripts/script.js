@@ -275,21 +275,85 @@ document.addEventListener('DOMContentLoaded', () => {
         function processAndRenderPosts(posts) {
             // Atualizar o card de destaques na página inicial se os elementos estiverem presentes
             if (posts.length > 0) {
+                // Artigo 1
                 const firstPost = posts[0];
-                const homeTitleEl = document.getElementById('latest-medium-title');
-                const homeDescEl = document.getElementById('latest-medium-desc');
+                const homeTitleEl1 = document.getElementById('latest-medium-title-1');
+                const homeDescEl1 = document.getElementById('latest-medium-desc-1');
+                const homeCoverImg1 = document.getElementById('latest-medium-cover-1');
+                const homeItem1 = document.getElementById('blog-highlight-item-1');
+                const homeBtn1 = document.getElementById('latest-medium-btn-1');
                 
-                if (homeTitleEl && homeDescEl) {
-                    homeTitleEl.textContent = firstPost.title;
+                if (homeTitleEl1 && homeDescEl1 && homeItem1) {
+                    homeTitleEl1.textContent = firstPost.title;
                     
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = firstPost.content || firstPost.description || '';
                     let cleanText = tempDiv.textContent || tempDiv.innerText || '';
                     cleanText = cleanText.trim().replace(/\s+/g, ' ');
-                    if (cleanText.length > 140) {
-                        cleanText = cleanText.substring(0, 135) + '...';
+                    if (cleanText.length > 100) {
+                        cleanText = cleanText.substring(0, 95) + '...';
                     }
-                    homeDescEl.textContent = cleanText;
+                    homeDescEl1.textContent = cleanText;
+
+                    // Injetar imagem se encontrada
+                    const firstImg = tempDiv.querySelector('img');
+                    let firstImgSrc = firstImg ? firstImg.src : '';
+                    if (!firstImgSrc && firstPost.thumbnail) {
+                        firstImgSrc = firstPost.thumbnail;
+                    }
+                    if (firstImgSrc && homeCoverImg1) {
+                        homeCoverImg1.src = firstImgSrc;
+                    }
+                    homeItem1.style.display = 'flex';
+                    
+                    // Configurar redirecionamento caso clique no botão
+                    if (homeBtn1) {
+                        homeBtn1.onclick = function() {
+                            const blogTabBtn = document.querySelector('.sidebar-menu a[data-target="blog"]');
+                            if (blogTabBtn) blogTabBtn.click();
+                        };
+                    }
+                }
+
+                // Artigo 2
+                if (posts.length > 1) {
+                    const secondPost = posts[1];
+                    const homeTitleEl2 = document.getElementById('latest-medium-title-2');
+                    const homeDescEl2 = document.getElementById('latest-medium-desc-2');
+                    const homeCoverImg2 = document.getElementById('latest-medium-cover-2');
+                    const homeItem2 = document.getElementById('blog-highlight-item-2');
+                    const homeBtn2 = document.getElementById('latest-medium-btn-2');
+                    
+                    if (homeTitleEl2 && homeDescEl2 && homeItem2) {
+                        homeTitleEl2.textContent = secondPost.title;
+                        
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = secondPost.content || secondPost.description || '';
+                        let cleanText = tempDiv.textContent || tempDiv.innerText || '';
+                        cleanText = cleanText.trim().replace(/\s+/g, ' ');
+                        if (cleanText.length > 100) {
+                            cleanText = cleanText.substring(0, 95) + '...';
+                        }
+                        homeDescEl2.textContent = cleanText;
+
+                        // Injetar imagem se encontrada
+                        const secondImg = tempDiv.querySelector('img');
+                        let secondImgSrc = secondImg ? secondImg.src : '';
+                        if (!secondImgSrc && secondPost.thumbnail) {
+                            secondImgSrc = secondPost.thumbnail;
+                        }
+                        if (secondImgSrc && homeCoverImg2) {
+                            homeCoverImg2.src = secondImgSrc;
+                        }
+                        homeItem2.style.display = 'flex';
+                        
+                        if (homeBtn2) {
+                            homeBtn2.onclick = function() {
+                                const blogTabBtn = document.querySelector('.sidebar-menu a[data-target="blog"]');
+                                if (blogTabBtn) blogTabBtn.click();
+                            };
+                        }
+                    }
                 }
             }
 

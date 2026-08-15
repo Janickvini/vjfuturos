@@ -4,11 +4,11 @@
 
 /* --- Design Tokens / Variables --- */
 :root {
-    /* Color Palette - HSL (Dark Theme Default) */
-    --bg-primary: #0a0f1d;
-    --bg-secondary: #0e1629;
-    --bg-tertiary: #1b253b;
-    --bg-glass: rgba(14, 22, 41, 0.7);
+    /* Color Palette - HSL (Dark Theme Default - Softened) */
+    --bg-primary: #0f1219;
+    --bg-secondary: #151922;
+    --bg-tertiary: #1f2533;
+    --bg-glass: rgba(21, 25, 34, 0.7);
     --border-glass: rgba(255, 255, 255, 0.08);
     --border-soft: rgba(255, 255, 255, 0.04);
     
@@ -16,17 +16,38 @@
     --bg-subcard: rgba(5, 8, 16, 0.45);
     --border-subcard: rgba(255, 255, 255, 0.08);
     --bg-subcard-hover: rgba(5, 8, 16, 0.65);
-    --border-subcard-hover: rgba(212, 175, 55, 0.25);
+    --border-subcard-hover: rgba(189, 160, 94, 0.25);
     
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
     --text-muted: #64748b;
     
     /* Accent Colors */
-    --accent: #d4af37; /* Sophisticated Gold */
-    --accent-hover: #f5b041;
-    --accent-glow: rgba(212, 175, 55, 0.12);
-    --accent-gradient: linear-gradient(135deg, #d4af37 0%, #f5b041 100%);
+    --accent: #bda05e; /* Sophisticated Champagne Gold (Softened) */
+    --accent-hover: #d2b67a;
+    --accent-glow: rgba(189, 160, 94, 0.12);
+    --accent-gradient: linear-gradient(135deg, #bda05e 0%, #d2b67a 100%);
+    --accent-gradient-hover: linear-gradient(135deg, #d2b67a 0%, #bda05e 100%);
+    --btn-primary-text: #0f1219;
+    
+    /* Tool colors (Dark Default) */
+    --tool-scic-color: #bda05e;
+    --tool-scic-bg: rgba(189, 160, 94, 0.09);
+    --tool-scic-border: rgba(189, 160, 94, 0.45);
+    --tool-scic-hover-bg: #bda05e;
+    --tool-scic-hover-color: #0f1219;
+    
+    --tool-cosfd-color: #5285c5;
+    --tool-cosfd-bg: rgba(82, 133, 197, 0.09);
+    --tool-cosfd-border: rgba(82, 133, 197, 0.45);
+    --tool-cosfd-hover-bg: #5285c5;
+    --tool-cosfd-hover-color: #ffffff;
+    
+    --tool-smpldea-color: #37a37e;
+    --tool-smpldea-bg: rgba(55, 163, 126, 0.09);
+    --tool-smpldea-border: rgba(55, 163, 126, 0.45);
+    --tool-smpldea-hover-bg: #37a37e;
+    --tool-smpldea-hover-color: #ffffff;
     
     /* Layout */
     --sidebar-width: 280px;
@@ -44,7 +65,7 @@
     
     /* Functional */
     --error: #f43f5e;
-    --success: #10b981;
+    --success: #37a37e;
     
     /* Transitions */
     --transition: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -53,24 +74,50 @@
 
 /* --- Light Theme Variables Override --- */
 body.light-theme {
-    --bg-primary: #f1f5f9;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #e2e8f0;
-    --bg-glass: rgba(255, 255, 255, 0.75);
+    --bg-primary: #e5e8ec; /* Softer, muted slate grey (no more glaring white background) */
+    --bg-secondary: #f1f3f6; /* Soft, opaque light gray for cards */
+    --bg-tertiary: #dce1e7;
+    --bg-glass: rgba(241, 243, 246, 0.85);
     --border-glass: rgba(15, 23, 42, 0.08);
     --border-soft: rgba(15, 23, 42, 0.04);
     
     /* Subcard styling variables (Light override) */
-    --bg-subcard: rgba(15, 23, 42, 0.045);
+    --bg-subcard: rgba(15, 23, 42, 0.05);
     --border-subcard: rgba(15, 23, 42, 0.09);
-    --bg-subcard-hover: rgba(255, 255, 255, 0.95);
-    --border-subcard-hover: rgba(180, 83, 9, 0.35);
+    --bg-subcard-hover: #fcfdfe; /* Lifted card hover */
+    --border-subcard-hover: rgba(189, 160, 94, 0.35);
     
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
+    --text-primary: #212836;
+    --text-secondary: #475569;
     --text-muted: #64748b;
-    --accent-glow: rgba(180, 83, 9, 0.08);
+    
+    /* Restored Sophisticated Gold for letters in light theme */
+    --accent: #bda05e; 
+    --accent-hover: #d2b67a;
+    --accent-glow: rgba(189, 160, 94, 0.12);
+    --accent-gradient: linear-gradient(135deg, #bda05e 0%, #d2b67a 100%);
+    --accent-gradient-hover: linear-gradient(135deg, #d2b67a 0%, #bda05e 100%);
+    --btn-primary-text: #0f1219;
     --shadow-glass: 0 4px 20px 0 rgba(15, 23, 42, 0.05);
+    
+    /* Tool colors (Light Override - SCIC Gold restored) */
+    --tool-scic-color: #bda05e;
+    --tool-scic-bg: rgba(189, 160, 94, 0.09);
+    --tool-scic-border: rgba(189, 160, 94, 0.45);
+    --tool-scic-hover-bg: #bda05e;
+    --tool-scic-hover-color: #0f1219;
+    
+    --tool-cosfd-color: #2c52b2;
+    --tool-cosfd-bg: rgba(44, 82, 178, 0.08);
+    --tool-cosfd-border: rgba(44, 82, 178, 0.35);
+    --tool-cosfd-hover-bg: #2c52b2;
+    --tool-cosfd-hover-color: #ffffff;
+    
+    --tool-smpldea-color: #0b6247;
+    --tool-smpldea-bg: rgba(11, 98, 71, 0.08);
+    --tool-smpldea-border: rgba(11, 98, 71, 0.35);
+    --tool-smpldea-hover-bg: #0b6247;
+    --tool-smpldea-hover-color: #ffffff;
 }
 
 /* --- Reset & Base Styles --- */
@@ -1554,10 +1601,10 @@ body.light-theme .data-table th {
 
 .btn-primary {
     background: var(--accent-gradient);
-    color: #0a0f1d;
+    color: var(--btn-primary-text);
 }
 .btn-primary:hover {
-    background: linear-gradient(135deg, #f5b041 0%, #d4af37 100%);
+    background: var(--accent-gradient-hover);
     transform: translateY(-1px);
 }
 
@@ -1938,13 +1985,13 @@ body.light-theme .data-table th {
 
 /* Opção 2: Adicionar uma barra de cor superior fina nos cards das ferramentas */
 .tools-grid .tool-column:nth-of-type(1) {
-    border-top: 3px solid #d4af37;
+    border-top: 3px solid var(--tool-scic-color);
 }
 .tools-grid .tool-column:nth-of-type(2) {
-    border-top: 3px solid #3b82f6;
+    border-top: 3px solid var(--tool-cosfd-color);
 }
 .tools-grid .tool-column:nth-of-type(3) {
-    border-top: 3px solid #10b981;
+    border-top: 3px solid var(--tool-smpldea-color);
 }
 
 .tool-column:hover {
@@ -1954,78 +2001,44 @@ body.light-theme .data-table th {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Opção 1: Destacar os botões com preenchimento semitransparente por padrão e sólido no hover */
-/* SCIC Web Button (Gold) */
+/* Destacar os botões com preenchimento semitransparente por padrão e sólido no hover usando variáveis CSS */
+/* SCIC Web Button */
 .tools-grid .tool-column:nth-of-type(1) .btn {
-    background: rgba(212, 175, 55, 0.09) !important;
-    border-color: rgba(212, 175, 55, 0.45) !important;
-    color: #d4af37 !important;
+    background: var(--tool-scic-bg) !important;
+    border-color: var(--tool-scic-border) !important;
+    color: var(--tool-scic-color) !important;
 }
 .tools-grid .tool-column:nth-of-type(1) .btn:hover {
-    background: #d4af37 !important;
-    color: #0a0f1d !important;
-    border-color: #d4af37 !important;
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+    background: var(--tool-scic-hover-bg) !important;
+    color: var(--tool-scic-hover-color) !important;
+    border-color: var(--tool-scic-hover-bg) !important;
+    box-shadow: 0 4px 12px var(--tool-scic-border) !important;
 }
 
-/* COSFD Button (Blue) */
+/* COSFD Button */
 .tools-grid .tool-column:nth-of-type(2) .btn {
-    background: rgba(59, 130, 246, 0.09) !important;
-    border-color: rgba(59, 130, 246, 0.45) !important;
-    color: #3b82f6 !important;
+    background: var(--tool-cosfd-bg) !important;
+    border-color: var(--tool-cosfd-border) !important;
+    color: var(--tool-cosfd-color) !important;
 }
 .tools-grid .tool-column:nth-of-type(2) .btn:hover {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+    background: var(--tool-cosfd-hover-bg) !important;
+    color: var(--tool-cosfd-hover-color) !important;
+    border-color: var(--tool-cosfd-hover-bg) !important;
+    box-shadow: 0 4px 12px var(--tool-cosfd-border) !important;
 }
 
-/* smplDEA Button (Green) */
+/* smplDEA Button */
 .tools-grid .tool-column:nth-of-type(3) .btn {
-    background: rgba(16, 185, 129, 0.09) !important;
-    border-color: rgba(16, 185, 129, 0.45) !important;
-    color: #10b981 !important;
+    background: var(--tool-smpldea-bg) !important;
+    border-color: var(--tool-smpldea-border) !important;
+    color: var(--tool-smpldea-color) !important;
 }
 .tools-grid .tool-column:nth-of-type(3) .btn:hover {
-    background: #10b981 !important;
-    color: #ffffff !important;
-    border-color: #10b981 !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
-}
-
-/* Light Theme Overrides para garantir acessibilidade/contraste */
-body.light-theme .tools-grid .tool-column:nth-of-type(1) .btn {
-    background: rgba(180, 83, 9, 0.08) !important;
-    border-color: rgba(180, 83, 9, 0.35) !important;
-    color: #b45309 !important;
-}
-body.light-theme .tools-grid .tool-column:nth-of-type(1) .btn:hover {
-    background: #b45309 !important;
-    color: #ffffff !important;
-    border-color: #b45309 !important;
-}
-
-body.light-theme .tools-grid .tool-column:nth-of-type(2) .btn {
-    background: rgba(29, 78, 216, 0.08) !important;
-    border-color: rgba(29, 78, 216, 0.35) !important;
-    color: #1d4ed8 !important;
-}
-body.light-theme .tools-grid .tool-column:nth-of-type(2) .btn:hover {
-    background: #1d4ed8 !important;
-    color: #ffffff !important;
-    border-color: #1d4ed8 !important;
-}
-
-body.light-theme .tools-grid .tool-column:nth-of-type(3) .btn {
-    background: rgba(4, 120, 87, 0.08) !important;
-    border-color: rgba(4, 120, 87, 0.35) !important;
-    color: #047857 !important;
-}
-body.light-theme .tools-grid .tool-column:nth-of-type(3) .btn:hover {
-    background: #047857 !important;
-    color: #ffffff !important;
-    border-color: #047857 !important;
+    background: var(--tool-smpldea-hover-bg) !important;
+    color: var(--tool-smpldea-hover-color) !important;
+    border-color: var(--tool-smpldea-hover-bg) !important;
+    box-shadow: 0 4px 12px var(--tool-smpldea-border) !important;
 }
 
 .tool-header {
@@ -2209,51 +2222,28 @@ body.light-theme .row-item-cover-img {
 
 /* Destaque nos botões das Publicações (Livros - Gold) */
 .highlights-subcard-column:first-of-type .highlights-row-item .btn {
-    background: rgba(212, 175, 55, 0.08) !important;
-    border-color: rgba(212, 175, 55, 0.4) !important;
-    color: #d4af37 !important;
+    background: var(--tool-scic-bg) !important;
+    border-color: var(--tool-scic-border) !important;
+    color: var(--tool-scic-color) !important;
 }
 .highlights-subcard-column:first-of-type .highlights-row-item .btn:hover {
-    background: #d4af37 !important;
-    color: #0a0f1d !important;
-    border-color: #d4af37 !important;
-    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.25) !important;
+    background: var(--tool-scic-hover-bg) !important;
+    color: var(--tool-scic-hover-color) !important;
+    border-color: var(--tool-scic-hover-bg) !important;
+    box-shadow: 0 4px 10px var(--tool-scic-border) !important;
 }
 
 /* Destaque nos botões dos Artigos do Blog (Blue) */
 .highlights-subcard-column:last-of-type .highlights-row-item .btn {
-    background: rgba(59, 130, 246, 0.08) !important;
-    border-color: rgba(59, 130, 246, 0.4) !important;
-    color: #3b82f6 !important;
+    background: var(--tool-cosfd-bg) !important;
+    border-color: var(--tool-cosfd-border) !important;
+    color: var(--tool-cosfd-color) !important;
 }
 .highlights-subcard-column:last-of-type .highlights-row-item .btn:hover {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25) !important;
-}
-
-/* Light Theme Overrides para os botões das Publicações & Blog */
-body.light-theme .highlights-subcard-column:first-of-type .highlights-row-item .btn {
-    background: rgba(180, 83, 9, 0.07) !important;
-    border-color: rgba(180, 83, 9, 0.35) !important;
-    color: #b45309 !important;
-}
-body.light-theme .highlights-subcard-column:first-of-type .highlights-row-item .btn:hover {
-    background: #b45309 !important;
-    color: #ffffff !important;
-    border-color: #b45309 !important;
-}
-
-body.light-theme .highlights-subcard-column:last-of-type .highlights-row-item .btn {
-    background: rgba(29, 78, 216, 0.07) !important;
-    border-color: rgba(29, 78, 216, 0.35) !important;
-    color: #1d4ed8 !important;
-}
-body.light-theme .highlights-subcard-column:last-of-type .highlights-row-item .btn:hover {
-    background: #1d4ed8 !important;
-    color: #ffffff !important;
-    border-color: #1d4ed8 !important;
+    background: var(--tool-cosfd-hover-bg) !important;
+    color: var(--tool-cosfd-hover-color) !important;
+    border-color: var(--tool-cosfd-hover-bg) !important;
+    box-shadow: 0 4px 10px var(--tool-cosfd-border) !important;
 }
 
 /* Layout Lado a Lado: Biografia e Galeria Mosaico */

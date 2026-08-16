@@ -494,6 +494,10 @@ body.light-theme .theme-toggle .moon-toggle {
     margin-bottom: 30px;
 }
 
+.retro-throbber {
+    display: none;
+}
+
 .content-header::after {
     content: '';
     position: absolute;
@@ -560,6 +564,9 @@ body.light-theme .panel-title::before {
 /* Tab Switching Control logic */
 .tab-panel {
     display: none;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
 }
 .tab-panel.active {
     display: block;
@@ -1133,7 +1140,7 @@ body.light-theme .data-table th {
     border-radius: var(--border-radius);
     padding: 10px 14px;
     display: grid;
-    grid-template-columns: 80px 1fr 50px;
+    grid-template-columns: 80px 1fr 85px;
     align-items: center;
     gap: 12px;
     border: 1px solid var(--border-glass);
@@ -2314,5 +2321,120 @@ body.light-theme .row-item-cover-img {
     }
 }
 
+/* --- Theme Time Travel Transition Animations --- */
+.main-content {
+    transition: opacity 0.35s ease-in-out, filter 0.35s ease-in-out !important;
+}
+.sidebar {
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+.theme-transitioning .main-content {
+    opacity: 0 !important;
+    filter: blur(12px) !important;
+}
+.theme-transitioning .sidebar {
+    transform: translateX(-100%) !important;
+}
+
+/* --- Tela de Erro Conceitual 2050 --- */
+.error-2050-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 12, 18, 0.65);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.error-2050-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.error-2050-card {
+    max-width: 550px;
+    width: 90%;
+    padding: 48px 40px;
+    border-radius: 16px;
+    background: rgba(26, 30, 43, 0.65);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(239, 68, 68, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.error-2050-overlay.active .error-2050-card {
+    transform: scale(1);
+}
+
+.error-2050-icon {
+    margin-bottom: 24px;
+    color: #ef4444;
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+    animation: pulseError 2s infinite ease-in-out;
+}
+
+@keyframes pulseError {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4));
+    }
+    50% {
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.7));
+    }
+}
+
+.error-2050-title {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #ef4444;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.15));
+}
+
+.error-2050-desc {
+    font-size: 1.15rem;
+    color: #f8fafc !important; /* Branco puro de alto contraste */
+    margin-bottom: 32px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.error-2050-buttons {
+    width: 100%;
+}
+
+.error-2050-buttons .btn {
+    padding: 14px 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-fast);
+}
+
+@media (max-width: 480px) {
+    .error-2050-buttons {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .error-2050-card {
+        padding: 32px 24px;
+    }
 }
 

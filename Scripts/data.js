@@ -16,7 +16,7 @@ const publicationsData = [
         autores: "Espinoza, D. F., Rebehy, P. C. P. W., Salgado Junior, A. P., Barossi Filho, M., Janick, V. R. F., & Novi, J. C.",
         fonte: "Sustainability, 18(16), 8296.",
         link: "https://doi.org/10.3390/su18168296",
-        status: "DOI"
+        status: "Download"
     },
     {
         ano: "2026",
@@ -25,7 +25,7 @@ const publicationsData = [
         autores: "Janick, V. R. F.",
         fonte: "Ribeirão Preto: Edição do Autor.",
         link: "https://doi.org/10.5281/zenodo.18078802",
-        status: "Zenodo"
+        status: "Download"
     },
     {
         ano: "2025",
@@ -34,7 +34,7 @@ const publicationsData = [
         autores: "Janick, V. R. F.",
         fonte: "Tese de Doutorado. Faculdade de Economia, Administração e Contabilidade de Ribeirão Preto, Universidade de São Paulo (FEA-RP/USP).",
         link: "https://doi.org/10.11606/T.96.2025.tde-22012026-180139",
-        status: "Link"
+        status: "Download"
     },
     {
         ano: "2023",
@@ -43,7 +43,7 @@ const publicationsData = [
         autores: "Lauro, A., Correa, C. R., Janick, V. R. F., Scoton, S., Silva, J. G. L. E., Santos, J. L., & Souza, N. V.",
         fonte: "Amazônia Azul Tecnologias de Defesa S.A. (Relatório Técnico Conclusivo).",
         link: "https://www.researchgate.net/publication/408095345_Relatorio_Tecnico_Conclusivo_-_Cenarios_Prospectivos_-_AMAZUL_2043",
-        status: "Link"
+        status: "Download"
     },
     {
         ano: "2022",
@@ -61,7 +61,7 @@ const publicationsData = [
         autores: "Janick, V. R. F., Santos, J. L., & Martins, C. C. B. (Orgs.)",
         fonte: "Rio de Janeiro: Alpheratz.",
         link: "http://doi.org/10.5281/zenodo.15109770",
-        status: "Zenodo"
+        status: "Download"
     },
     {
         ano: "2021",
@@ -106,6 +106,6 @@ const publicationsData = [
         autores: "Flor, C. R. A., Gitahy, P. F. S. C. R., Araujo, C. A., Guimarães, V. V. S., & Janick, V. R. F.",
         fonte: "Revista da Escola de Guerra Naval (Ed. Português), 26(3), 739–774.",
         link: "http://doi.org/10.21544/1809-3191.v26n3.p739-774",
-        status: "DOI"
+        status: "Download"
     }
 ];

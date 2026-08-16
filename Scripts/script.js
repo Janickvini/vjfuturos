@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Action HTML (Anchor link or simple text status)
             let actionHtml = `<span class="row-status-text">${pub.status}</span>`;
             if (pub.link) {
-                actionHtml = `<a href="${pub.link}" target="_blank" class="row-link">${pub.status}</a>`;
+                actionHtml = `<a href="${pub.link}" target="_blank" class="row-link">Download</a>`;
             } else if (pub.status === 'Restrito') {
                 actionHtml = `<span class="row-status-text text-lock">Restrito</span>`;
             }
@@ -81,8 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
             targetBtn.classList.add('active');
             targetPanel.classList.add('active');
 
-            // Reset views: not needed for Medium links as they open in a new tab
-
             // Reset scroll of content
             if (mainContent) mainContent.scrollTop = 0;
 
@@ -90,6 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sidebar && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
                 if (mobileMenuToggle) mobileMenuToggle.classList.remove('open');
+            }
+
+            // Update URL Hash without triggering screen jump
+            if (window.location.hash.substring(1) !== targetId) {
+                history.pushState(null, null, `#${targetId}`);
             }
         }
     }
@@ -109,6 +112,27 @@ document.addEventListener('DOMContentLoaded', () => {
             activateMainTab(targetTab);
         });
     });
+
+    // URL Hash Routing on Page Load
+    const initialHash = window.location.hash.substring(1);
+    if (initialHash) {
+        const targetPanel = document.getElementById(`panel-${initialHash}`);
+        if (targetPanel) {
+            // Pequeno delay para garantir carregamentos dinâmicos iniciais
+            setTimeout(() => activateMainTab(initialHash), 50);
+        }
+    }
+
+    // URL Hash change popstate listener (For browser back/forward buttons)
+    window.addEventListener('popstate', () => {
+        const currentHash = window.location.hash.substring(1);
+        if (currentHash) {
+            const targetPanel = document.getElementById(`panel-${currentHash}`);
+            if (targetPanel) activateMainTab(currentHash);
+        } else {
+            activateMainTab('home'); // Fallback to main tab
+        }
+    });
  
     // --- 1.5. Viaje no Tempo (Time Travel Theme Switcher) ---
     const timeSelect = document.getElementById('time-select');
@@ -116,31 +140,83 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastValidTime = '2020'; // Keep track of previous valid selection
 
     if (timeSelect && themeStylesheet) {
-        timeSelect.addEventListener('change', (e) => {
-            const selectedVal = e.target.value;
-
-            if (selectedVal === '2050') {
-                // Show warning popup
-                alert('ERRO CONCEITUAL: para adivinhações consulte um futurista.');
-                // Reset select value back to previous valid state
-                timeSelect.value = lastValidTime;
-            } else {
-                // Update last valid time
-                lastValidTime = selectedVal;
-                
-                // Map select value to corresponding stylesheet
-                if (selectedVal === '1990') {
-                    themeStylesheet.setAttribute('href', 'Estilos/style_90.css?v=' + Date.now());
-                } else if (selectedVal === '2000') {
-                    themeStylesheet.setAttribute('href', 'Estilos/style_2000.css?v=' + Date.now());
-                } else if (selectedVal === '2010') {
-                    themeStylesheet.setAttribute('href', 'Estilos/style_2010.css?v=' + Date.now());
-                } else {
-                    // Default / 2020s
-                    themeStylesheet.setAttribute('href', 'Estilos/style.css?v=' + Date.now());
+        function applyTimeTheme(value, isInitialLoad) {
+            if (value === '2050') {
+                // Mostrar a tela cheia de erro conceitual em vez do alert
+                const errorPage = document.getElementById('error-2050-page');
+                if (errorPage) {
+                    errorPage.classList.add('active');
                 }
+                return;
             }
+
+            // Update last valid time
+            lastValidTime = value;
+            
+            // Map select value to corresponding override stylesheet
+            let newHref = 'Estilos/theme_blank.css';
+            if (value === '1990') {
+                newHref = 'Estilos/style_90.css';
+            } else if (value === '2000') {
+                newHref = 'Estilos/style_2000.css';
+            } else if (value === '2010') {
+                newHref = 'Estilos/style_2010.css';
+            }
+
+            const finalHref = newHref + '?v=' + Date.now();
+
+            if (isInitialLoad) {
+                // Apply immediately on load to prevent slow rendering
+                themeStylesheet.setAttribute('href', finalHref);
+            } else {
+                const appLayout = document.querySelector('.app-layout');
+                if (appLayout) {
+                    appLayout.classList.add('theme-transitioning');
+                }
+
+                // Smoothly swap stylesheet after fade-out transition starts
+                setTimeout(() => {
+                    const tempLink = document.createElement('link');
+                    tempLink.rel = 'stylesheet';
+                    tempLink.href = finalHref;
+
+                    const done = () => {
+                        themeStylesheet.setAttribute('href', finalHref);
+                        setTimeout(() => {
+                            if (appLayout) {
+                                appLayout.classList.remove('theme-transitioning');
+                            }
+                        }, 50);
+                        tempLink.remove();
+                    };
+
+                    tempLink.onload = done;
+                    tempLink.onerror = done;
+                    document.head.appendChild(tempLink);
+                }, 200);
+            }
+        }
+
+        timeSelect.addEventListener('change', (e) => {
+            applyTimeTheme(e.target.value, false);
         });
+
+        // Configurar clique no botão de retorno da tela de erro conceitual (voltar para o último tempo válido)
+        const btnReturn = document.getElementById('btn-return-scientific');
+        const errorPage = document.getElementById('error-2050-page');
+        if (btnReturn && errorPage) {
+            btnReturn.addEventListener('click', () => {
+                // Ocultar a camada de erro
+                errorPage.classList.remove('active');
+                // Apenas restaurar o valor anterior no seletor lateral
+                timeSelect.value = lastValidTime;
+            });
+        }
+
+        // Sync theme on load in case the browser restored a non-default select value
+        if (timeSelect.value !== '2020') {
+            applyTimeTheme(timeSelect.value, true);
+        }
     }
 
     // --- 2. Mobile Menu Toggle ---
